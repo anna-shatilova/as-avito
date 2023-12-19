@@ -4,35 +4,28 @@ import { Link } from 'react-router-dom'
 import * as S from './Cards.styles'
 
 export const Cards = () => {
+
   return (
     <S.MainContent>
       <S.Cards>
         <S.CardsItem>
           <S.Card>
-            <S.CardImg>
-              <Link
-                href="#"
-                target="_blank"
-              >
+            <Link to={`/adv/:id`}>
+              <S.CardImg>
                 <img
                   src="#"
                   alt="picture"
                 />
-              </Link>
-            </S.CardImg>
-            <S.CardContent>
-              <Link
-                href=""
-                target="_blank"
-              >
+              </S.CardImg>
+              <S.CardContent>
                 <S.CardTitle>
                   Ракетка для большого тенниса Triumph Pro ST
                 </S.CardTitle>
-              </Link>
-              <S.CardPrice>2&nbsp;200&nbsp;₽</S.CardPrice>
-              <S.CardPlace>Санкт Петербург</S.CardPlace>
-              <S.CardDate>Сегодня в&nbsp;10:45</S.CardDate>
-            </S.CardContent>
+                <S.CardPrice>2&nbsp;200&nbsp;₽</S.CardPrice>
+                <S.CardPlace>Санкт Петербург</S.CardPlace>
+                <S.CardDate>Сегодня в&nbsp;10:45</S.CardDate>
+              </S.CardContent>
+            </Link>
           </S.Card>
         </S.CardsItem>
 

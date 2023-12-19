@@ -98,11 +98,11 @@ export const ArticleInfoText = styled.div`
     color: #5f5f5f;
     margin-bottom: 4px;
   }
+`
 
-  & a {
-    color: #009ee4;
-    font-family: 'Noto Sans', sans-serif;
-  }
+export const Reviews = styled.a`
+color: #009ee4;
+font-family: 'Noto Sans', sans-serif;
 `
 
 export const ArticlePrice = styled.p`

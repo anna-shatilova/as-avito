@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { ModalCloseButton } from '../modal-close-button/ModalCloseButton';
-import * as S from './AddNewAd.styles';
+import { useState } from 'react'
+import { ModalCloseButton } from '../modal-close-button/ModalCloseButton'
+import * as S from './AddNewAdv.styles'
 
-export const AddNewAd = () => {
-  const [disableButton] = useState(true);
-  const editMode = false;
+export const AddNewAdv = ({ setOpenModalWindow }) => {
+  const [disableButton] = useState(true)
+  const editMode = false
 
   return (
     <S.Wrapper>
@@ -14,8 +14,13 @@ export const AddNewAd = () => {
             <S.ModalHeading>
               {editMode ? 'Редактировать объявление' : 'Новое объявление'}
             </S.ModalHeading>
-            <ModalCloseButton />
-            <S.FormNewAd id="#" action="#">
+            <ModalCloseButton
+              setOpenModalWindow={setOpenModalWindow}
+            />
+            <S.FormNewAd
+              id="#"
+              action="#"
+            >
               <S.FormNewAdBlock>
                 <label htmlFor="name">Название</label>
                 <input
@@ -41,30 +46,49 @@ export const AddNewAd = () => {
                 </S.FormNewAdText>
                 <S.FormNewAdBarImg>
                   <S.FormNewAdImg>
-                    <img src="#" alt="" />
+                    <img
+                      src="#"
+                      alt=""
+                    />
                     <S.FormNewAdImgCover></S.FormNewAdImgCover>
                   </S.FormNewAdImg>
                   <S.FormNewAdImg>
-                    <img src="#" alt="" />
+                    <img
+                      src="#"
+                      alt=""
+                    />
                     <S.FormNewAdImgCover></S.FormNewAdImgCover>
                   </S.FormNewAdImg>
                   <S.FormNewAdImg>
                     <S.FormNewAdImgCover></S.FormNewAdImgCover>
-                    <img src="#" alt="" />
+                    <img
+                      src="#"
+                      alt=""
+                    />
                   </S.FormNewAdImg>
                   <S.FormNewAdImg>
                     <S.FormNewAdImgCover></S.FormNewAdImgCover>
-                    <img src="#" alt="" />
+                    <img
+                      src="#"
+                      alt=""
+                    />
                   </S.FormNewAdImg>
                   <S.FormNewAdImg>
                     <S.FormNewAdImgCover></S.FormNewAdImgCover>
-                    <img src="#" alt="" />
+                    <img
+                      src="#"
+                      alt=""
+                    />
                   </S.FormNewAdImg>
                 </S.FormNewAdBarImg>
               </S.FormNewAdBlock>
               <S.FormNewAdBlock>
                 <label htmlFor="price">Цена</label>
-                <input type="number" name="price" required />
+                <input
+                  type="number"
+                  name="price"
+                  required
+                />
                 <S.FormNewAdPriceCover></S.FormNewAdPriceCover>
               </S.FormNewAdBlock>
 
@@ -76,5 +100,5 @@ export const AddNewAd = () => {
         </S.ModalBlock>
       </S.ContainerBg>
     </S.Wrapper>
-  );
-};
+  )
+}

@@ -1,9 +1,13 @@
-import * as S from './ModalCloseButton.styles';
+import * as S from './ModalCloseButton.styles'
 
-export const ModalCloseButton = () => {
+export const ModalCloseButton = ({ setOpenModalWindow }) => {
+  const handleChangeOpen = () => {
+    setOpenModalWindow((isOpenModalWindow) => !isOpenModalWindow)
+  }
+
   return (
-    <S.ModalButtonClose>
+    <S.ModalButtonClose onClick={handleChangeOpen}>
       <S.ModalButtonCloseLine></S.ModalButtonCloseLine>
     </S.ModalButtonClose>
-  );
-};
+  )
+}

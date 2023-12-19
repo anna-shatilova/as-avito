@@ -11,6 +11,7 @@ import { Search } from '../../components/search/Search'
 import { Footer } from '../../components/footer/Footer'
 
 export const AppLayout = () => {
+
   return (
     <>
       <GlobalStyles />

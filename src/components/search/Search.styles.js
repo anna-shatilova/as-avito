@@ -11,15 +11,9 @@ export const MainSearch = styled.div`
   padding: 40px 10px;
 `
 
-export const SearchLogoLink = styled.a``
-
 export const SearchLogoImg = styled.img`
   width: 54px;
   height: auto;
-`
-
-export const SearchLogoMobLink = styled.a`
-  display: none;
 `
 
 export const SearchLogoMobImg = styled.img``
@@ -64,6 +58,8 @@ export const SearchButton = styled(Button)`
   height: 50px;
   font-size: 16px;
   line-height: 24px;
+  justify-content: center;
+  align-items: center;
 `
 
 export const GoMainPageButton = styled(Button)`
@@ -71,4 +67,6 @@ export const GoMainPageButton = styled(Button)`
   height: 50px;
   font-size: 16px;
   line-height: 150%;
+  justify-content: center;
+  align-items: center;
 `

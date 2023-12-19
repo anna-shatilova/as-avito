@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import * as S from './Reviews.styles';
-import { ModalCloseButton } from '../modal-close-button/ModalCloseButton';
+import { useState } from 'react'
+import * as S from './Reviews.styles'
+import { ModalCloseButton } from '../modal-close-button/ModalCloseButton'
 
-export const Reviews = () => {
-  const [disableButton] = useState(true);
+export const Reviews = ({ setOpenModalWindow }) => {
+  const [disableButton] = useState(true)
 
   return (
     <S.Wrapper>
@@ -11,7 +11,7 @@ export const Reviews = () => {
         <S.ModalBlock>
           <S.ModalContent>
             <S.ModalHeading>Отзывы о товаре</S.ModalHeading>
-            <ModalCloseButton />
+            <ModalCloseButton setOpenModalWindow={setOpenModalWindow} />
             <S.ModalScroll>
               <S.ModalFormAddReview action="#">
                 <S.FormAddReviewBlock>
@@ -34,7 +34,10 @@ export const Reviews = () => {
                   <S.ReviewItem>
                     <S.ReviewImgContainer>
                       <S.ReviewImg>
-                        <img src="#" alt="" />
+                        <img
+                          src="#"
+                          alt=""
+                        />
                       </S.ReviewImg>
                     </S.ReviewImgContainer>
                     <S.ReviewContent>
@@ -55,7 +58,10 @@ export const Reviews = () => {
                   <S.ReviewItem>
                     <S.ReviewImgContainer>
                       <S.ReviewImg>
-                        <img src="#" alt="" />
+                        <img
+                          src="#"
+                          alt=""
+                        />
                       </S.ReviewImg>
                     </S.ReviewImgContainer>
                     <S.ReviewContent>
@@ -76,7 +82,10 @@ export const Reviews = () => {
                   <S.ReviewItem>
                     <S.ReviewImgContainer>
                       <S.ReviewImg>
-                        <img src="#" alt="" />
+                        <img
+                          src="#"
+                          alt=""
+                        />
                       </S.ReviewImg>
                     </S.ReviewImgContainer>
                     <S.ReviewContent>
@@ -97,7 +106,10 @@ export const Reviews = () => {
                   <S.ReviewItem>
                     <S.ReviewImgContainer>
                       <S.ReviewImg>
-                        <img src="#" alt="" />
+                        <img
+                          src="#"
+                          alt=""
+                        />
                       </S.ReviewImg>
                     </S.ReviewImgContainer>
                     <S.ReviewContent>
@@ -118,7 +130,10 @@ export const Reviews = () => {
                   <S.ReviewItem>
                     <S.ReviewImgContainer>
                       <S.ReviewImg>
-                        <img src="#" alt="" />
+                        <img
+                          src="#"
+                          alt=""
+                        />
                       </S.ReviewImg>
                     </S.ReviewImgContainer>
                     <S.ReviewContent>
@@ -139,7 +154,10 @@ export const Reviews = () => {
                   <S.ReviewItem>
                     <S.ReviewImgContainer>
                       <S.ReviewImg>
-                        <img src="#" alt="" />
+                        <img
+                          src="#"
+                          alt=""
+                        />
                       </S.ReviewImg>
                     </S.ReviewImgContainer>
                     <S.ReviewContent>
@@ -160,7 +178,10 @@ export const Reviews = () => {
                   <S.ReviewItem>
                     <S.ReviewImgContainer>
                       <S.ReviewImg>
-                        <img src="#" alt="" />
+                        <img
+                          src="#"
+                          alt=""
+                        />
                       </S.ReviewImg>
                     </S.ReviewImgContainer>
                     <S.ReviewContent>
@@ -181,7 +202,10 @@ export const Reviews = () => {
                   <S.ReviewItem>
                     <S.ReviewImgContainer>
                       <S.ReviewImg>
-                        <img src="#" alt="" />
+                        <img
+                          src="#"
+                          alt=""
+                        />
                       </S.ReviewImg>
                     </S.ReviewImgContainer>
                     <S.ReviewContent>
@@ -203,5 +227,5 @@ export const Reviews = () => {
         </S.ModalBlock>
       </S.ContainerBg>
     </S.Wrapper>
-  );
-};
+  )
+}
