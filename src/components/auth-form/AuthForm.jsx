@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import * as S from './AuthForm.styles'
 import { useEffect, useState } from 'react'
 
@@ -13,6 +13,11 @@ export const AuthForm = ({ title, typeLogin }) => {
   //   const [isLoading, setIsLoading] = useState(false)
   const [inputError, setInputError] = useState(null)
 
+  const navigate = useNavigate()
+
+  const onSubmit = (event) => {
+    event.preventDefault()
+  }
   //   const handleClick = async () => {
   //     try {
   const handleClick = () => {
@@ -60,9 +65,9 @@ export const AuthForm = ({ title, typeLogin }) => {
   }
 
   // Сбрасываем ошибку если пользователь меняет данные на форме или меняется режим формы
-//   useEffect(() => {
-//     setInputError(null)
-//   }, [email, pass])
+  useEffect(() => {
+    setInputError(null)
+  }, [email, pass])
 
   return (
     <S.AuthContainer>
@@ -73,7 +78,7 @@ export const AuthForm = ({ title, typeLogin }) => {
             alt="logo"
           />
         </S.ModalLogo>
-        <S.ModalForm>
+        <S.ModalForm onSubmit={onSubmit}>
           <S.Inputs>
             <S.ModalInput
               type="email"
@@ -125,6 +130,7 @@ export const AuthForm = ({ title, typeLogin }) => {
           {inputError && <S.Error>{inputError}</S.Error>}
           <S.Buttons>
             <S.ModalButton
+              type="submit"
               //   disabled={isLoading}
               onClick={handleClick}
             >
@@ -132,11 +138,12 @@ export const AuthForm = ({ title, typeLogin }) => {
               {title}
             </S.ModalButton>
             {typeLogin && (
-              <Link to="/register">
-                <S.ModalButtonRegister>
-                  Зарегистрироваться
-                </S.ModalButtonRegister>
-              </Link>
+              <S.ModalButtonRegister
+                type="submit"
+                onClick={() => navigate('/register')}
+              >
+                Зарегистрироваться
+              </S.ModalButtonRegister>
             )}
           </S.Buttons>
         </S.ModalForm>
