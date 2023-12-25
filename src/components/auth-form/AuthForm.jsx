@@ -15,9 +15,11 @@ export const AuthForm = ({ title, typeLogin }) => {
 
   const navigate = useNavigate()
 
+// Препятствует перезагрузке страницы при нажатиии кнопок, когда они находятся внутри формы
   const onSubmit = (event) => {
     event.preventDefault()
   }
+  
   //   const handleClick = async () => {
   //     try {
   const handleClick = () => {

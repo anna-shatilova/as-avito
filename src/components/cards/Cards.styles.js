@@ -64,7 +64,7 @@ export const CardImg = styled.div`
   }
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.03);
     box-shadow: 0 0 10px #4b4848;
   }
 `

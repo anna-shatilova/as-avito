@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components'
+import styled, { createGlobalStyle, keyframes } from 'styled-components'
 
 export const GlobalStyles = createGlobalStyle`
 * {
@@ -123,6 +123,35 @@ export const ButtonWithBorder = styled.button`
   }
 `
 
+const rotate = keyframes`
+0% {
+  transform: rotate(0)
+}
+100% {
+  transform: rotate(360deg)
+}
+`
+
+export const Loader = styled.div`
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin-top: 150px;
+  left: 550px;
+
+  &::before,
+  &::after {
+    content: '';
+    border-radius: 50%;
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.3) inset;
+  }
+  &::after {
+    box-shadow: 0 5px 0 #009ee4 inset;
+    animation: ${rotate} 2s linear infinite;
+  }
+`
 // export const TitleH2 = css`
 //   color: #000;
 //   font-size: 40px;

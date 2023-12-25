@@ -1,10 +1,22 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Reviews } from '../../components/modals/Reviews'
 import * as S from './AdvPage.styles'
 import { AddNewAdv } from '../../components/modals/AddNewAdv'
+import { useGetIdAdsQuery } from '../../api/adsApi'
+import { Loader } from '../../App.styles'
+import { formatDate } from '../../utils/formatDate'
+import { baseUrl } from '../../utils/baseUrl'
+import { ShowPhoneNumButton } from '../../components/phone-num-button/ShowPhoneNumButton'
 
 export const AdvPage = () => {
+  const params = useParams()
+
+  const { data, isLoading, error } = useGetIdAdsQuery({ id: params.id })
+  console.log(data)
+
+  const [currentImg, setCurrentImg] = useState(null)
+
   const navigate = useNavigate()
   const [isOpenReviews, setOpenReviews] = useState(false)
   const [isAdvSettings, setAdvSettings] = useState(false)
@@ -23,74 +35,106 @@ export const AdvPage = () => {
   }
   return (
     <>
-      <S.ArticleContainer>
-        <S.Article>
-          <S.ArticleMerryGoRound>
-            <S.Carousel>
-              <S.CarouselImg>
-                <img src="#" />
-              </S.CarouselImg>
-              <S.CarouselBar>
-                <S.CarouselBarImg>
-                  <img
-                    src="/img/nopic.png"
-                    alt=""
-                  />
-                </S.CarouselBarImg>
-              </S.CarouselBar>
-              <S.CarouselBarMob>
-                <div className="img-bar-mob__circle circle-active"></div>
-                <div className="img-bar-mob__circle"></div>
-                <div className="img-bar-mob__circle"></div>
-                <div className="img-bar-mob__circle"></div>
-                <div className="img-bar-mob__circle"></div>
-              </S.CarouselBarMob>
-            </S.Carousel>
-          </S.ArticleMerryGoRound>
-          <S.ArticleInfoContainer>
-            <S.ArticleInfo>
-              <S.ArticleHeading>
-                Ракетка для большого тенниса Triumph Pro STС Б/У
-              </S.ArticleHeading>
-              <S.ArticleInfoText>
-                <p>123</p>
-                <p>123</p>
-                <S.Reviews onClick={handlerOpenReviews}>23 отзыва</S.Reviews>
-              </S.ArticleInfoText>
-              <S.ArticlePrice>123 ₽</S.ArticlePrice>
-              <S.ButtonsContainer>
-                <S.ArticleButton onClick={handlerAdvSettings}>
-                  Редактировать
-                </S.ArticleButton>
-                <S.ArticleButton>Снять с публикации</S.ArticleButton>
-              </S.ButtonsContainer>
+      {isLoading ? (
+        <Loader />
+      ) : error ? (
+        <p> Не удалось загрузить объявление, попробуйте позже</p>
+      ) : (
+        <>
+          <S.ArticleContainer>
+            <S.Article>
+              <S.ArticleMerryGoRound>
+                <S.Carousel>
+                  <S.CarouselImg>
+                    <img
+                      src={
+                        currentImg
+                          ? baseUrl + currentImg
+                          : !data.images[0]
+                            ? '/img/nopic.png'
+                            : baseUrl + data.images[0].url
+                      }
+                    />
+                  </S.CarouselImg>
+                  <S.CarouselBar>
+                    {data.images.length > 1 ? (
+                      data.images.map((image) => (
+                        <S.CarouselBarImg
+                          key={image.id}
+                          onClick={() => setCurrentImg(image.url)}
+                        >
+                          <img src={baseUrl + image.url} />
+                        </S.CarouselBarImg>
+                      ))
+                    ) : (
+                      <S.CarouselBarImg>
+                        <img src="/img/nopic.png" />
+                      </S.CarouselBarImg>
+                    )}
+                  </S.CarouselBar>
+                  <S.CarouselBarMob>
+                    <div className="img-bar-mob__circle circle-active"></div>
+                    <div className="img-bar-mob__circle"></div>
+                    <div className="img-bar-mob__circle"></div>
+                    <div className="img-bar-mob__circle"></div>
+                    <div className="img-bar-mob__circle"></div>
+                  </S.CarouselBarMob>
+                </S.Carousel>
+              </S.ArticleMerryGoRound>
+              <S.ArticleInfoContainer>
+                <S.ArticleInfo>
+                  <S.ArticleHeading>{data.title}</S.ArticleHeading>
+                  <S.ArticleInfoText>
+                    <p>{formatDate(data.created_on)}</p>
+                    <p>{data.user.city}</p>
+                    <S.Reviews onClick={handlerOpenReviews}>
+                      23 отзыва
+                    </S.Reviews>
+                  </S.ArticleInfoText>
+                  <S.ArticlePrice>{data.price} ₽</S.ArticlePrice>
+                  <S.ButtonsContainer>
+                    {/* Добавить проверку на объявление текущего юзера 
+                    Number(data.user_id) === id текущего юзера из стора*/}
+                    <ShowPhoneNumButton phone={data.user.phone} />
+                    <S.ArticleButton onClick={handlerAdvSettings}>
+                      Редактировать
+                    </S.ArticleButton>
+                    <S.ArticleButton>Снять с публикации</S.ArticleButton>
+                  </S.ButtonsContainer>
 
-              <S.ArticleAuthor>
-                <S.AuthorImg>
-                  <img
-                    src="#"
-                    alt=""
-                  />
-                </S.AuthorImg>
-                <S.AuthorInfo>
-                  <S.AuthorName onClick={() => navigate('/seller-profile')}>
-                    123
-                  </S.AuthorName>
-                  <S.AuthorAbout>Продает товары с 123</S.AuthorAbout>
-                </S.AuthorInfo>
-              </S.ArticleAuthor>
-            </S.ArticleInfo>
-          </S.ArticleInfoContainer>
-        </S.Article>
-      </S.ArticleContainer>
+                  <S.ArticleAuthor>
+                    <S.AuthorImg>
+                      <img
+                        src={data.user.avatar && baseUrl + data.user.avatar}
+                        alt="avatar"
+                      />
+                    </S.AuthorImg>
+                    <S.AuthorInfo>
+                      <S.AuthorName onClick={() => navigate('/seller-profile')}>
+                        {data.user.name}
+                      </S.AuthorName>
+                      <S.AuthorAbout>
+                        Продает товары с {formatDate(data.user.sells_from)}
+                      </S.AuthorAbout>
+                    </S.AuthorInfo>
+                  </S.ArticleAuthor>
+                </S.ArticleInfo>
+              </S.ArticleInfoContainer>
+            </S.Article>
+          </S.ArticleContainer>
 
-      <S.ArticleDescriptionContainer>
-        <S.DescriptionHeading>Описание товара</S.DescriptionHeading>
-        <S.Description>
-          {/* <p>{actualAd?.description}</p> */}
-          <p>Описание товара отсутствует</p>
-        </S.Description>
-      </S.ArticleDescriptionContainer>
+          <S.ArticleDescriptionContainer>
+            <S.DescriptionHeading>Описание товара</S.DescriptionHeading>
+            <S.Description>
+              {data.description ? (
+                <p>{data.description}</p>
+              ) : (
+                <p>Описание товара отсутствует</p>
+              )}
+            </S.Description>
+          </S.ArticleDescriptionContainer>
+        </>
+      )}
 
       {isOpenReviews && <Reviews setOpenModalWindow={closeWindows} />}
       {isAdvSettings && <AddNewAdv setOpenModalWindow={closeWindows} />}
