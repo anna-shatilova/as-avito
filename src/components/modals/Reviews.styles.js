@@ -144,6 +144,9 @@ export const FormButtonReviewPublish = styled(Button)`
 export const Reviews = styled.div`
   width: 100%;
   height: 495px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `
 
 export const Review = styled.div`

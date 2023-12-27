@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Reviews } from '../../components/modals/Reviews'
 import * as S from './AdvPage.styles'
 import { AddNewAdv } from '../../components/modals/AddNewAdv'
-import { useGetIdAdsQuery } from '../../api/adsApi'
+import { useGetIdAdsQuery, useGetIdCommentsAdsQuery } from '../../api/adsApi'
 import { Loader } from '../../App.styles'
 import { formatDate } from '../../utils/formatDate'
 import { baseUrl } from '../../utils/baseUrl'
@@ -13,7 +13,8 @@ export const AdvPage = () => {
   const params = useParams()
 
   const { data, isLoading, error } = useGetIdAdsQuery({ id: params.id })
-  console.log(data)
+  const { data: comments } = useGetIdCommentsAdsQuery({ id: params.id })
+  console.log(comments)
 
   const [currentImg, setCurrentImg] = useState(null)
 
@@ -28,11 +29,15 @@ export const AdvPage = () => {
     setAdvSettings((isAdvSettings) => !isAdvSettings)
   }
   // закрывает модальные окна
-  function closeWindows() {
-    // setOpenReviews((isOpenReviews) => !isOpenReviews)
+  function closeReviewsWindow() {
+    setOpenReviews((isOpenReviews) => !isOpenReviews)
+  }
+
+  function closeSettingsWindow() {
     setAdvSettings((isAdvSettings) => !isAdvSettings)
     // setModalError(false)
   }
+
   return (
     <>
       {isLoading ? (
@@ -88,7 +93,7 @@ export const AdvPage = () => {
                     <p>{formatDate(data.created_on)}</p>
                     <p>{data.user.city}</p>
                     <S.Reviews onClick={handlerOpenReviews}>
-                      23 отзыва
+                      {comments.length} отзывы
                     </S.Reviews>
                   </S.ArticleInfoText>
                   <S.ArticlePrice>{data.price} ₽</S.ArticlePrice>
@@ -136,8 +141,13 @@ export const AdvPage = () => {
         </>
       )}
 
-      {isOpenReviews && <Reviews setOpenModalWindow={closeWindows} />}
-      {isAdvSettings && <AddNewAdv setOpenModalWindow={closeWindows} />}
+      {isOpenReviews && (
+        <Reviews
+          comments={comments}
+          setOpenReviewsWindow={closeReviewsWindow}
+        />
+      )}
+      {isAdvSettings && <AddNewAdv setOpenSettingsWindow={closeSettingsWindow} />}
     </>
   )
 }

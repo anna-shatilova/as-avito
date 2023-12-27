@@ -86,6 +86,14 @@ export const adsApi = createApi({
       }),
       providesTags: [{ type: 'ads' }],
     }),
+    getIdCommentsAds: build.query({
+        query: ({ id }) => ({
+          url: `ads/${id}/comments`,
+          method: 'GET',
+        }),
+        providesTags: [{ type: 'ads' }],
+      }),
+  
     // getFavoriteTracks: build.query({
     //   query: () => ({
     //     url: 'track/favorite/all',
@@ -137,6 +145,7 @@ export const adsApi = createApi({
 export const {
   useGetAdsQuery,
   useGetIdAdsQuery,
+  useGetIdCommentsAdsQuery,
 //   useGetFavoriteTracksQuery,
 //   useAddFavoriteTracksMutation,
 //   useDeleteFavoriteTracksMutation,

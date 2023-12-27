@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ModalCloseButton } from '../modal-close-button/ModalCloseButton'
 import * as S from './AddNewAdv.styles'
 
-export const AddNewAdv = ({ setOpenModalWindow }) => {
+export const AddNewAdv = ({ setOpenSettingsWindow }) => {
   const [disableButton] = useState(true)
   const editMode = false
 
@@ -15,7 +15,7 @@ export const AddNewAdv = ({ setOpenModalWindow }) => {
               {editMode ? 'Редактировать объявление' : 'Новое объявление'}
             </S.ModalHeading>
             <ModalCloseButton
-              setOpenModalWindow={setOpenModalWindow}
+              setOpenModalWindow={setOpenSettingsWindow}
             />
             <S.FormNewAd
               id="#"
