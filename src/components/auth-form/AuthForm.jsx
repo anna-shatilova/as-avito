@@ -1,6 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import * as S from './AuthForm.styles'
 import { useEffect, useState } from 'react'
+import {
+  useGetTokensMutation,
+  useRegisterUserMutation,
+} from '../../api/userApi'
+import { trimSpaces } from '../../utils/trimSpaces'
 
 export const AuthForm = ({ title, typeLogin }) => {
   const [email, setEmail] = useState('')
@@ -10,60 +15,78 @@ export const AuthForm = ({ title, typeLogin }) => {
   const [lastName, setLastName] = useState('')
   const [city, setCity] = useState('')
 
-  //   const [isLoading, setIsLoading] = useState(false)
   const [inputError, setInputError] = useState(null)
 
   const navigate = useNavigate()
 
-// Препятствует перезагрузке страницы при нажатиии кнопок, когда они находятся внутри формы
+  const [registerUser, { isLoading: regLoading }] = useRegisterUserMutation()
+  const [getTokens, { isLoading }] = useGetTokensMutation()
+
+  // Препятствует перезагрузке страницы при нажатиии кнопок, когда они находятся внутри формы
   const onSubmit = (event) => {
     event.preventDefault()
   }
-  
-  //   const handleClick = async () => {
-  //     try {
-  const handleClick = () => {
-    if (!email) {
-      setInputError('Введите email')
-      return
-    }
-    if (!pass) {
-      setInputError('Введите пароль')
-      return
-    }
-    if (!typeLogin && pass !== repPass) {
-      setInputError('Пароли не совпадают')
-      return
-    }
-    if (!typeLogin && pass.length < 8 && pass.length > 0) {
-      setInputError('Пароль должен содержать не менее 8 символов')
-      return
-    }
-    navigate('/profile')
 
-    //   setIsLoading(true)
-    //   let user = {}
-    //   if (typeLogin) {
-    //     user = await login({ email, pass })
-    //   } else {
-    //     user = await registration({ email, pass })
-    //   }
-    //   if (user) {
-    //     dispatch(
-    //       setUser({
-    //         email: user.email,
-    //         id: user.uid,
-    //         token: user.accessToken,
-    //       }),
-    //     )
-    //     saveUserInfoInLocalStorage(user)
-    //     navigate('/')
-    //   }
-    // } catch (error) {
-    // setInputError(error.message)
-    // } finally {
-    //   setIsLoading(false)
-    // }
+  const handleClick = async () => {
+    try {
+      if (!email) {
+        setInputError('Введите email')
+        return
+      }
+      if (!pass) {
+        setInputError('Введите пароль')
+        return
+      }
+      if (!typeLogin && pass !== repPass) {
+        setInputError('Пароли не совпадают')
+        return
+      }
+      if (!typeLogin && pass.length < 8 && pass.length > 0) {
+        setInputError('Пароль должен содержать не менее 8 символов')
+        return
+      }
+      const pattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+      if (!pattern.test(email.toLowerCase())) {
+        setInputError('Введите корректный email')
+        return
+      }
+
+      if (typeLogin) {
+        // Авторизация
+
+        await getTokens({ email, password }).then((tokensData) => {
+          if (tokensData.error?.status === 401) {
+            setInputError('Неправильный пароль')
+            return
+          } else {
+            localStorage.setItem('ads-board', JSON.stringify(tokensData.data))
+            navigate('/profile', { replace: true })
+          }
+        })
+      } else {
+        // Регистрация
+        await registerUser({
+          email,
+          password,
+          name: trimSpaces(firstName),
+          surname: trimSpaces(lastName),
+          city: trimSpaces(city),
+          role: 'user',
+        }).then((userData) => {
+          if (userData.error?.status === 400) {
+            setInputError('Пользователь с таким email уже существует')
+            return
+          } else {
+            getTokens({ email, password }).then((tokensData) => {
+              localStorage.setItem('ads-board', JSON.stringify(tokensData.data))
+              navigate('/profile', { replace: true })
+            })
+          }
+        })
+      }
+    } catch (error) {
+      setInputError(error.message)
+    }
   }
 
   // Сбрасываем ошибку если пользователь меняет данные на форме или меняется режим формы
@@ -136,8 +159,7 @@ export const AuthForm = ({ title, typeLogin }) => {
               //   disabled={isLoading}
               onClick={handleClick}
             >
-              {/* {isLoading ? 'Логинимся' :  */}
-              {title}
+              {isLoading || regLoading ? 'Логинимся' : title}
             </S.ModalButton>
             {typeLogin && (
               <S.ModalButtonRegister

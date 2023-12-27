@@ -1,85 +1,97 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { baseUrl } from '../utils/baseUrl'
 
 export const userApi = createApi({
   reducerPath: 'userApi',
-  tagTypes: ['user'],
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8090/',
+    baseUrl: baseUrl,
   }),
-  //    baseQueryWithReAuth,
   endpoints: (build) => ({
-    getUser: build.query({
-      query: () => ({
-        url: 'ads',
+    registerUser: build.mutation({
+      query: (userData) => ({
+        url: '/auth/register',
+        method: 'POST',
+        body: userData,
       }),
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.map(({ id }) => ({ type: 'ads', id })),
-              { type: 'ads', id: 'LIST' },
-            ]
-          : [{ type: 'ads', id: 'LIST' }],
     }),
-    // getIdTrack: build.query({
-    //   query: ({ id }) => ({
-    //     url: `track/${id}`,
-    //     method: 'GET',
-    //   }),
-    //   providesTags: [{ type: 'Track' }],
-    // }),
-    // getFavoriteTracks: build.query({
-    //   query: () => ({
-    //     url: 'track/favorite/all',
-    //   }),
-    //   providesTags: (result) =>
-    //     result
-    //       ? [
-    //           ...result.map(({ id }) => ({ type: 'FavoriteTracks', id })),
-    //           { type: 'FavoriteTracks', id: 'LIST' },
-    //         ]
-    //       : [{ type: 'FavoriteTracks', id: 'LIST' }],
-    // }),
-    // addFavoriteTracks: build.mutation({
-    //   query: ({ id }) => ({
-    //     url: `track/${id}/favorite/`,
-    //     method: 'POST',
-    //   }),
-    //   invalidatesTags: [
-    //     { type: 'FavoriteTracks', id: 'LIST' },
-    //     { type: 'Track' },
-    //   ],
-    // }),
-    // deleteFavoriteTracks: build.mutation({
-    //   query: ({ id }) => ({
-    //     url: `track/${id}/favorite/`,
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: [
-    //     { type: 'FavoriteTracks', id: 'LIST' },
-    //     { type: 'Track' },
-    //   ],
-    // }),
-    // getCategoryTracks: build.query({
-    //   query: ({ id }) => ({
-    //     url: `selection/${id}/`,
-    //     method: 'GET',
-    //   }),
-    //   providesTags: (result) =>
-    //     result
-    //       ? [
-    //           ...result.items.map(({ id }) => ({ type: 'FavoriteTracks', id })),
-    //           { type: 'FavoriteTracks', id: 'LIST' },
-    //         ]
-    //       : [{ type: 'FavoriteTracks', id: 'LIST' }],
-    // }),
+    getTokens: build.mutation({
+      query: (userData) => ({
+        url: '/auth/login',
+        method: 'POST',
+        body: userData,
+      }),
+    }),
   }),
-})
+});
 
-export const {
-  useGetUserQuery,
-  //   useGetIdTrackQuery,
-  //   useGetFavoriteTracksQuery,
-  //   useAddFavoriteTracksMutation,
-  //   useDeleteFavoriteTracksMutation,
-  //   useGetCategoryTracksQuery,
-} = userApi
+export const { useRegisterUserMutation, useGetTokensMutation } = userApi;
+
+
+// export async function register({ email, password,firstName, lastName, city }) {
+//   const response = await fetch(`${baseUrl}auth/register/`, {
+//     method: 'POST',
+//     body: JSON.stringify({
+//       password,
+//       email,
+//       name: firstName,
+//       surname: lastName,
+//       city,
+//     }),
+//     headers: {
+//       'content-type': 'application/json',
+//     },
+//   })
+
+//   const data = await response.json()
+
+//   if (!response.ok) {
+//     const error = data.email?.[0] ?? data.password?.[0]
+//     throw new Error(error)
+//   }
+
+//   return data
+// }
+
+// export async function login({ email, password }) {
+//   const response = await fetch(`${baseUrl}/auth/login/`, {
+//     method: 'POST',
+//     body: JSON.stringify({
+//       email,
+//       password,
+//     }),
+//     headers: {
+//       'content-type': 'application/json',
+//     },
+//   })
+
+//   const data = await response.json()
+
+//   if (!response.ok) {
+//     const error = data.email ?? data.password
+//     throw new Error(error)
+//   }
+
+//   return data
+// }
+
+// export async function getToken({ email, password }) {
+//   const response = await fetch(`${baseURL}/user/token/`, {
+//     method: 'POST',
+//     body: JSON.stringify({
+//       email,
+//       password,
+//     }),
+//     headers: {
+//       'content-type': 'application/json',
+//     },
+//   })
+
+//   const data = await response.json()
+
+//   if (!response.ok) {
+//     const error = data.email?.[0] ?? data.username?.[0] ?? data.password?.[0]
+//     throw new Error(error)
+//   }
+
+//   return data
+// }
