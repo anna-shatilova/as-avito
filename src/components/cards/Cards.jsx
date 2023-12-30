@@ -1,13 +1,29 @@
-// import { baseUrl } from '../../pages/adv-page/AdvPage';
-// import { formatDate } from '../../utils/getDate';
+import { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import * as S from './Cards.styles'
-import { useGetAdsQuery } from '../../api/adsApi'
 import { Loader } from '../../App.styles'
 import { formatDate } from '../../utils/formatDate'
+import { baseUrl } from '../../utils/baseUrl'
+import { Context } from '../../context/searchContext'
 
-export const Cards = () => {
-  const { data = [], isLoading, error } = useGetAdsQuery()
+export const Cards = ({ data, isLoading, error }) => {
+  // Поиск
+  const [searchText, setSearchText] = useContext(Context)
+
+  const filterAds = () => {
+    let filteredAds = data
+
+    if (searchText.length > 0) {
+      filteredAds = filteredAds.filter(
+        (ads) =>
+          ads.title?.toLowerCase().includes(searchText?.toLowerCase()) ||
+          ads.description?.toLowerCase().includes(searchText?.toLowerCase()),
+      )
+    }
+    return filteredAds
+  }
+
+  const filteredAds = searchText ? filterAds() : data
 
   return (
     <S.MainContent>
@@ -17,7 +33,7 @@ export const Cards = () => {
         <p> Не удалось загрузить список товаров, попробуйте позже</p>
       ) : (
         <S.Cards>
-          {data?.map((ad) => (
+          {filteredAds?.map((ad) => (
             <S.CardsItem key={ad.id}>
               <S.Card>
                 <S.CardImg>
@@ -25,7 +41,7 @@ export const Cards = () => {
                     <img
                       src={
                         ad?.images[0]
-                          ? 'http://localhost:8090/' + ad.images[0].url
+                          ? baseUrl + ad.images[0].url
                           : '/img/nopic.png'
                       }
                       alt="picture"

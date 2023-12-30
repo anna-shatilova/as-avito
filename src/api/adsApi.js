@@ -62,10 +62,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const adsApi = createApi({
   reducerPath: 'adsApi',
   tagTypes: ['ads'],
-  baseQuery:fetchBaseQuery({
+  baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:8090/',
   }),
-//    baseQueryWithReAuth,
+  //    baseQueryWithReAuth,
   endpoints: (build) => ({
     getAds: build.query({
       query: () => ({
@@ -79,6 +79,13 @@ export const adsApi = createApi({
             ]
           : [{ type: 'ads', id: 'LIST' }],
     }),
+    getAdsSeller: build.query({
+      query: ({ user_id }) => ({
+        url: `ads?user_id=${user_id}`,
+        method: 'GET',
+      }),
+      providesTags: [{ type: 'ads' }],
+    }),
     getIdAds: build.query({
       query: ({ id }) => ({
         url: `ads/${id}`,
@@ -87,13 +94,13 @@ export const adsApi = createApi({
       providesTags: [{ type: 'ads' }],
     }),
     getIdCommentsAds: build.query({
-        query: ({ id }) => ({
-          url: `ads/${id}/comments`,
-          method: 'GET',
-        }),
-        providesTags: [{ type: 'ads' }],
+      query: ({ id }) => ({
+        url: `ads/${id}/comments`,
+        method: 'GET',
       }),
-  
+      providesTags: [{ type: 'ads' }],
+    }),
+
     // getFavoriteTracks: build.query({
     //   query: () => ({
     //     url: 'track/favorite/all',
@@ -144,10 +151,11 @@ export const adsApi = createApi({
 
 export const {
   useGetAdsQuery,
+  useGetAdsSellerQuery,
   useGetIdAdsQuery,
   useGetIdCommentsAdsQuery,
-//   useGetFavoriteTracksQuery,
-//   useAddFavoriteTracksMutation,
-//   useDeleteFavoriteTracksMutation,
-//   useGetCategoryTracksQuery,
+  //   useGetFavoriteTracksQuery,
+  //   useAddFavoriteTracksMutation,
+  //   useDeleteFavoriteTracksMutation,
+  //   useGetCategoryTracksQuery,
 } = adsApi

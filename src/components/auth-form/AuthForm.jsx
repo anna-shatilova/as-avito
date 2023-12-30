@@ -9,12 +9,12 @@ import { trimSpaces } from '../../utils/trimSpaces'
 
 export const AuthForm = ({ title, typeLogin }) => {
   const [email, setEmail] = useState('')
-  const [pass, setPass] = useState('')
+  const [password, setPassword] = useState('')
   const [repPass, setRepPass] = useState('')
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [city, setCity] = useState('')
-
+  
   const [inputError, setInputError] = useState(null)
 
   const navigate = useNavigate()
@@ -33,15 +33,15 @@ export const AuthForm = ({ title, typeLogin }) => {
         setInputError('Введите email')
         return
       }
-      if (!pass) {
+      if (!password) {
         setInputError('Введите пароль')
         return
       }
-      if (!typeLogin && pass !== repPass) {
+      if (!typeLogin && password !== repPass) {
         setInputError('Пароли не совпадают')
         return
       }
-      if (!typeLogin && pass.length < 8 && pass.length > 0) {
+      if (!typeLogin && password.length < 8 && password.length > 0) {
         setInputError('Пароль должен содержать не менее 8 символов')
         return
       }
@@ -92,7 +92,7 @@ export const AuthForm = ({ title, typeLogin }) => {
   // Сбрасываем ошибку если пользователь меняет данные на форме или меняется режим формы
   useEffect(() => {
     setInputError(null)
-  }, [email, pass])
+  }, [email, password])
 
   return (
     <S.AuthContainer>
@@ -116,8 +116,8 @@ export const AuthForm = ({ title, typeLogin }) => {
               type="password"
               name="password"
               placeholder="Пароль"
-              value={pass}
-              onChange={(e) => setPass(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             {!typeLogin && (
               <>

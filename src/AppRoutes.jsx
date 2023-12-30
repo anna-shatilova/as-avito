@@ -45,7 +45,7 @@ export const AppRoutes = () => {
           element={<ProfilePage />}
         />
         <Route
-          path="/seller-profile"
+          path="/seller-profile/:id"
           element={<SellerProfilePage />}
         />
         <Route

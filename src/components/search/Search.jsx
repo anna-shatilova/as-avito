@@ -1,7 +1,12 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import * as S from './Search.styles'
+import { useContext } from 'react'
+import { Context } from '../../context/searchContext'
 
 export const Search = () => {
+  
+  const [searchText, setSearchText] = useContext(Context)
+
   const navigate = useNavigate()
   const location = useLocation()
   const displaySearchInput = location.pathname === '/' ? 'flex' : 'none'
@@ -26,6 +31,8 @@ export const Search = () => {
       <S.SearchBlock>
         <S.SearchText
           type="search"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
           placeholder="Поиск по объявлениям"
           name="search"
           style={{ display: displaySearchInput }}

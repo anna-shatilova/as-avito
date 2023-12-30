@@ -1,19 +1,26 @@
+// import { useGetUserQuery } from '../../api/userApi'
 import { Cards } from '../../components/cards/Cards'
 import { ShowPhoneNumButton } from '../../components/phone-num-button/ShowPhoneNumButton'
+import { formatDate } from '../../utils/formatDate'
 import * as S from './ProfilePage.styles'
+import {baseUrl} from '../../utils/baseUrl'
 
-export const ProfilePage = () => {
-  const seller = false
+export const ProfilePage = ({ adsSeller, isLoading, error, sellerPage }) => {
+  console.log('ProfilePage', adsSeller)
+  // const { data = [] } = useGetUserQuery()
+
   return (
     <>
       <S.ProfileContainer>
         <S.ProfileTitle>
-          {seller ? 'Профиль продавца' : 'Здравствуйте, Антон!'}
+          {sellerPage ? 'Профиль продавца' : `Здравствуйте, name!`}
         </S.ProfileTitle>
 
         <S.Profile>
           <S.ProfileContent>
-            {!seller && <S.ProfileHeading>Настройки профиля</S.ProfileHeading>}
+            {!sellerPage && (
+              <S.ProfileHeading>Настройки профиля</S.ProfileHeading>
+            )}
             <S.ProfileSettings>
               <S.SettingsLeft>
                 <S.SettingsAvatar>
@@ -22,12 +29,16 @@ export const ProfilePage = () => {
                     target="_self"
                   >
                     <img
-                      src="#"
-                      alt=""
+                      src={
+                        sellerPage
+                          ? adsSeller[0]?.user?.avatar &&
+                            baseUrl + adsSeller[0].user.avatar
+                          : '#'
+                      }
                     />
                   </a>
                 </S.SettingsAvatar>
-                {!seller && (
+                {!sellerPage && (
                   <S.SettingsChangeAvatar
                     href="#"
                     target="_self"
@@ -37,7 +48,7 @@ export const ProfilePage = () => {
                 )}
               </S.SettingsLeft>
               <S.SettingsRight>
-                {!seller && (
+                {!sellerPage && (
                   <S.SettingsForm>
                     <S.SettingsInputContainer>
                       <label htmlFor="fname">Имя</label>
@@ -78,11 +89,14 @@ export const ProfilePage = () => {
                     <S.SettingsButton>Сохранить</S.SettingsButton>
                   </S.SettingsForm>
                 )}
-                {seller && (
+                {sellerPage && (
                   <S.SellerInfoContainer>
-                    <p>Кирилл Матвеев</p>
-                    <p>Санкт-Петербург</p>
-                    <p>Продает товары с августа 2021</p>
+                    <p>{adsSeller[0].user.name}</p>
+                    <p>{adsSeller[0].user.city}</p>
+                    <p>
+                      Продает товары с{' '}
+                      {formatDate(adsSeller[0].user.sells_from)}
+                    </p>
 
                     <div className="seller__img-mob-block">
                       <div
@@ -100,7 +114,7 @@ export const ProfilePage = () => {
                         </a>
                       </div>
 
-                      <ShowPhoneNumButton />
+                      <ShowPhoneNumButton phone={adsSeller[0].user.phone} />
                     </div>
                   </S.SellerInfoContainer>
                 )}
@@ -111,9 +125,13 @@ export const ProfilePage = () => {
       </S.ProfileContainer>
       <S.CardsContainer>
         <S.ProfileHeading>
-          {seller ? 'Товары продавца' : 'Мои товары'}
+          {sellerPage ? 'Товары продавца' : 'Мои товары'}
         </S.ProfileHeading>
-        <Cards />
+        <Cards
+          data={sellerPage ? adsSeller : data}
+          isLoading={isLoading}
+          error={error}
+        />
       </S.CardsContainer>
     </>
   )

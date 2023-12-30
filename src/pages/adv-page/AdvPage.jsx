@@ -14,7 +14,6 @@ export const AdvPage = () => {
 
   const { data, isLoading, error } = useGetIdAdsQuery({ id: params.id })
   const { data: comments } = useGetIdCommentsAdsQuery({ id: params.id })
-  console.log(comments)
 
   const [currentImg, setCurrentImg] = useState(null)
 
@@ -93,7 +92,7 @@ export const AdvPage = () => {
                     <p>{formatDate(data.created_on)}</p>
                     <p>{data.user.city}</p>
                     <S.Reviews onClick={handlerOpenReviews}>
-                      {comments.length} отзывы
+                      {comments?.length} отзывы
                     </S.Reviews>
                   </S.ArticleInfoText>
                   <S.ArticlePrice>{data.price} ₽</S.ArticlePrice>
@@ -111,11 +110,14 @@ export const AdvPage = () => {
                     <S.AuthorImg>
                       <img
                         src={data.user.avatar && baseUrl + data.user.avatar}
-                        alt="avatar"
                       />
                     </S.AuthorImg>
                     <S.AuthorInfo>
-                      <S.AuthorName onClick={() => navigate('/seller-profile')}>
+                      <S.AuthorName
+                        onClick={() =>
+                          navigate(`/seller-profile/${data.user_id}`)
+                        }
+                      >
                         {data.user.name}
                       </S.AuthorName>
                       <S.AuthorAbout>
@@ -147,7 +149,9 @@ export const AdvPage = () => {
           setOpenReviewsWindow={closeReviewsWindow}
         />
       )}
-      {isAdvSettings && <AddNewAdv setOpenSettingsWindow={closeSettingsWindow} />}
+      {isAdvSettings && (
+        <AddNewAdv setOpenSettingsWindow={closeSettingsWindow} />
+      )}
     </>
   )
 }

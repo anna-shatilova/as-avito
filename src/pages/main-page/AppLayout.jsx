@@ -9,8 +9,12 @@ import {
 import { Header } from '../../components/header/Header'
 import { Search } from '../../components/search/Search'
 import { Footer } from '../../components/footer/Footer'
+import { Context } from '../../context/searchContext'
+import { useState } from 'react'
 
 export const AppLayout = () => {
+  
+  const [searchText, setSearchText] = useState('')
 
   return (
     <>
@@ -19,10 +23,12 @@ export const AppLayout = () => {
         <Container>
           <Header />
           <Main>
-          <Search />
-          <MainContainer>
-            <Outlet />
-          </MainContainer>
+            <Context.Provider value={[searchText, setSearchText]}>
+              <Search />
+              <MainContainer>
+                <Outlet />
+              </MainContainer>
+            </Context.Provider>
           </Main>
           <Footer />
         </Container>
