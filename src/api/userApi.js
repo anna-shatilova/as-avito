@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { baseUrl } from '../utils/baseUrl'
 
 export const userApi = createApi({
@@ -21,17 +21,13 @@ export const userApi = createApi({
         body: userData,
       }),
     }),
-    getUser: build.query({
-      query: () => ({
-        url: `user`,
-        method: 'GET',
-      }),
-    }),
   }),
-});
+})
 
-export const { useRegisterUserMutation, useGetTokensMutation, useGetUserQuery } = userApi;
-
+export const {
+  useRegisterUserMutation,
+  useGetTokensMutation,
+} = userApi
 
 // export async function register({ email, password,firstName, lastName, city }) {
 //   const response = await fetch(`${baseUrl}auth/register/`, {

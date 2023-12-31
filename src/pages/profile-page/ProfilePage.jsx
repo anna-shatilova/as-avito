@@ -1,19 +1,22 @@
-// import { useGetUserQuery } from '../../api/userApi'
+import { useGetAdsUserQuery, useGetUserQuery } from '../../api/adsApi'
 import { Cards } from '../../components/cards/Cards'
 import { ShowPhoneNumButton } from '../../components/phone-num-button/ShowPhoneNumButton'
 import { formatDate } from '../../utils/formatDate'
 import * as S from './ProfilePage.styles'
-import {baseUrl} from '../../utils/baseUrl'
+import { baseUrl } from '../../utils/baseUrl'
 
 export const ProfilePage = ({ adsSeller, isLoading, error, sellerPage }) => {
-  console.log('ProfilePage', adsSeller)
-  // const { data = [] } = useGetUserQuery()
+  const { data } = useGetUserQuery()
+  const { data: adsUser } = useGetAdsUserQuery()
+  console.log('ProfilePageData', data)
+
+  console.log('ProfilePageAdsUser', adsUser)
 
   return (
     <>
       <S.ProfileContainer>
         <S.ProfileTitle>
-          {sellerPage ? 'Профиль продавца' : `Здравствуйте, name!`}
+          {sellerPage ? 'Профиль продавца' : `Здравствуйте, ${data.email}!`}
         </S.ProfileTitle>
 
         <S.Profile>
@@ -33,7 +36,7 @@ export const ProfilePage = ({ adsSeller, isLoading, error, sellerPage }) => {
                         sellerPage
                           ? adsSeller[0]?.user?.avatar &&
                             baseUrl + adsSeller[0].user.avatar
-                          : '#'
+                          : data.avatar && baseUrl + data.avatar
                       }
                     />
                   </a>
@@ -128,7 +131,7 @@ export const ProfilePage = ({ adsSeller, isLoading, error, sellerPage }) => {
           {sellerPage ? 'Товары продавца' : 'Мои товары'}
         </S.ProfileHeading>
         <Cards
-          data={sellerPage ? adsSeller : data}
+          data={sellerPage ? adsSeller : adsUser}
           isLoading={isLoading}
           error={error}
         />

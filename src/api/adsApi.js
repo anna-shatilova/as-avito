@@ -1,71 +1,86 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-// import { setAuth } from './authSlice'
+import { setAuth } from '../store/authSlice'
 
-// const baseQueryWithReAuth = async (args, api, extraOptions) => {
-//   const baseQuery = fetchBaseQuery({
-//     baseUrl: 'http://localhost:8090/',
-//     prepareHeaders: (headers, { getState }) => {
-//       const token = getState().user.access
+const baseQueryWithReAuth = async (args, api, extraOptions) => {
+  const baseQuery = fetchBaseQuery({
+    baseUrl: 'http://localhost:8090/',
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth.access_token
 
-//       if (token) {
-//         headers.set('authorization', `Bearer ${token}`)
-//       }
+      console.log('Использую токен из стора', { token })
 
-//       return headers
-//     },
-//   })
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`)
+      }
 
-//   const result = await baseQuery(args, api, extraOptions)
+      return headers
+    },
+  })
 
-//   if (result?.error?.status !== 401) {
-//     return result
-//   }
+  const result = await baseQuery(args, api, extraOptions)
+  console.log('Результат первого запроса', { result })
+  if (result?.error?.status !== 401) {
+    return result
+  }
 
-//   const forceLogout = () => {
-//     api.dispatch(setAuth(null))
-//     window.location.assign('/login')
-//   }
+  const forceLogout = () => {
+    console.log('Принудительная авторизация!')
 
-//   const { auth } = api.getState()
+    api.dispatch(
+      setAuth({
+        access_token: null,
+        refresh_token: null,
+      }),
+    )
+    localStorage.clear()
+    window.location.assign('/login')
+  }
 
-//   if (!auth.refresh) {
-//     return forceLogout()
-//   }
+  const { auth } = api.getState()
+  console.log('Данные пользователя в сторе', { auth })
 
-//   const refreshResult = await baseQuery(
-//     {
-//       url: '/user/token/refresh/',
-//       method: 'POST',
-//       body: {
-//         refresh: auth.refresh,
-//       },
-//     },
-//     api,
-//     extraOptions,
-//   )
+  if (!auth.refresh_token) {
+    return forceLogout()
+  }
 
-//   if (refreshResult?.error?.data) {
-//     return forceLogout()
-//   }
+  const refreshResult = await baseQuery(
+    {
+      url: 'auth/login',
+      method: 'PUT',
+      body: {
+        access_token: auth.access_token,
+        refresh_token: auth.refresh_token,
+      },
+    },
+    api,
+    extraOptions,
+  )
+  console.log('Результат запроса на обновление токена', { refreshResult })
+  if (refreshResult?.error?.data) {
+    return forceLogout()
+  }
 
-//   api.dispatch(setAuth({ ...auth, access: refreshResult.data.access }))
+  api.dispatch(
+    setAuth({
+      ...auth,
+      access_token: refreshResult.data.access_token,
+      refresh_token: refreshResult.data.refresh_token,
+    }),
+  )
 
-//   const retryResult = await baseQuery(args, api, extraOptions)
+  const retryResult = await baseQuery(args, api, extraOptions)
 
-//   if (retryResult?.error?.status === 401) {
-//     return forceLogout()
-//   }
-
-//   return retryResult
-// }
+  if (retryResult?.error?.status === 401) {
+    return forceLogout()
+  }
+  console.log('Повторный запрос завершился успешно')
+  return retryResult
+}
 
 export const adsApi = createApi({
   reducerPath: 'adsApi',
   tagTypes: ['ads'],
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8090/',
-  }),
-  //    baseQueryWithReAuth,
+  baseQuery: baseQueryWithReAuth,
   endpoints: (build) => ({
     getAds: build.query({
       query: () => ({
@@ -79,13 +94,13 @@ export const adsApi = createApi({
             ]
           : [{ type: 'ads', id: 'LIST' }],
     }),
-    getAdsSeller: build.query({
-      query: ({ user_id }) => ({
-        url: `ads?user_id=${user_id}`,
-        method: 'GET',
-      }),
-      providesTags: [{ type: 'ads' }],
-    }),
+    // getAdsSeller: build.query({
+    //   query: ({ user_id }) => ({
+    //     url: `ads?user_id=${user_id}`,
+    //     method: 'GET',
+    //   }),
+    //   providesTags: [{ type: 'ads' }],
+    // }),
     getIdAds: build.query({
       query: ({ id }) => ({
         url: `ads/${id}`,
@@ -96,6 +111,19 @@ export const adsApi = createApi({
     getIdCommentsAds: build.query({
       query: ({ id }) => ({
         url: `ads/${id}/comments`,
+        method: 'GET',
+      }),
+      providesTags: [{ type: 'ads' }],
+    }),
+    getUser: build.query({
+      query: () => ({
+        url: `user`,
+        method: 'GET',
+      }),
+    }),
+    getAdsUser: build.query({
+      query: () => ({
+        url: `ads/me`,
         method: 'GET',
       }),
       providesTags: [{ type: 'ads' }],
@@ -151,9 +179,11 @@ export const adsApi = createApi({
 
 export const {
   useGetAdsQuery,
-  useGetAdsSellerQuery,
+  // useGetAdsSellerQuery,
   useGetIdAdsQuery,
   useGetIdCommentsAdsQuery,
+  useGetUserQuery,
+  useGetAdsUserQuery,
   //   useGetFavoriteTracksQuery,
   //   useAddFavoriteTracksMutation,
   //   useDeleteFavoriteTracksMutation,

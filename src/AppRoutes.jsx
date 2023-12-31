@@ -7,9 +7,9 @@ import { MainPage } from './pages/main-page/MainPage'
 import { AppLayout } from './pages/main-page/AppLayout'
 import { SellerProfilePage } from './pages/profile-page/SellerProfilePage'
 import { AdvPage } from './pages/adv-page/AdvPage'
-// import { ProtectedRout } from './components/ProtectedRout/index'
+import { ProtectedRout } from './components/protected-rout/ProtectedRout'
 
-export const AppRoutes = () => {
+export const AppRoutes = ({ user }) => {
   return (
     <Routes>
       <Route
@@ -26,34 +26,34 @@ export const AppRoutes = () => {
       />
 
       {/* Outlet. index - это главный роут, его компонент будет отображается при загрузке приложения в компоненте AppLayout. Это и есть outlet (так он называется в AppLayout). На других страницах вместо  outlet будет отображаться разметка этих страниц. */}
-      {/* <Route
+      <Route
         element={
           <ProtectedRout
             user={user}
             isAllowed={Boolean(user)}
           />
         }
-      > */}
-      <Route element={<AppLayout />}>
-        <Route
-          path="/"
-          index
-          element={<MainPage />}
-        />
-        <Route
-          path="/profile"
-          element={<ProfilePage />}
-        />
-        <Route
-          path="/seller-profile/:id"
-          element={<SellerProfilePage />}
-        />
-        <Route
-          path="/adv/:id"
-          element={<AdvPage />}
-        />
+      >
+        <Route element={<AppLayout />}>
+          <Route
+            path="/"
+            index
+            element={<MainPage />}
+          />
+          <Route
+            path="/profile"
+            element={<ProfilePage />}
+          />
+          <Route
+            path="/seller-profile/:id"
+            element={<SellerProfilePage />}
+          />
+          <Route
+            path="/adv/:id"
+            element={<AdvPage />}
+          />
+        </Route>
       </Route>
-      {/* </Route> */}
     </Routes>
   )
 }

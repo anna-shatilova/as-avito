@@ -1,11 +1,13 @@
-import { useNavigate } from 'react-router-dom'
-import * as S from './AuthForm.styles'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import * as S from './AuthForm.styles'
 import {
   useGetTokensMutation,
   useRegisterUserMutation,
 } from '../../api/userApi'
 import { trimSpaces } from '../../utils/trimSpaces'
+import { setAuth } from '../../store/authSlice'
 
 export const AuthForm = ({ title, typeLogin }) => {
   const [email, setEmail] = useState('')
@@ -14,10 +16,11 @@ export const AuthForm = ({ title, typeLogin }) => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [city, setCity] = useState('')
-  
+
   const [inputError, setInputError] = useState(null)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [registerUser, { isLoading: regLoading }] = useRegisterUserMutation()
   const [getTokens, { isLoading }] = useGetTokensMutation()
@@ -59,7 +62,13 @@ export const AuthForm = ({ title, typeLogin }) => {
             setInputError('Неправильный пароль')
             return
           } else {
-            localStorage.setItem('ads-board', JSON.stringify(tokensData.data))
+            dispatch(
+              setAuth({
+                access_token: tokensData.data.access_token,
+                refresh_token: tokensData.data.refresh_token,
+              }),
+            )
+
             navigate('/profile', { replace: true })
           }
         })
@@ -78,7 +87,13 @@ export const AuthForm = ({ title, typeLogin }) => {
             return
           } else {
             getTokens({ email, password }).then((tokensData) => {
-              localStorage.setItem('ads-board', JSON.stringify(tokensData.data))
+              dispatch(
+                setAuth({
+                  access_token: tokensData.data.access_token,
+                  refresh_token: tokensData.data.refresh_token,
+                }),
+              )
+
               navigate('/profile', { replace: true })
             })
           }
