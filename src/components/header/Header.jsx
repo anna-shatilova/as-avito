@@ -6,11 +6,10 @@ import { AddNewAdv } from '../modals/AddNewAdv'
 import { setAuth } from '../../store/authSlice'
 
 export const Header = () => {
-
-  const user = useSelector((state) => state.auth.access_token)
+  const user = useSelector((state) => state.auth.isAuth)
 
   const [modalAddNewAdv, setModalAddNewAdv] = useState(false)
-  
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -23,6 +22,7 @@ export const Header = () => {
       setAuth({
         access_token: '',
         refresh_token: '',
+        isAuth: false,
       }),
     )
     localStorage.clear()

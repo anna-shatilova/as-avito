@@ -66,6 +66,7 @@ export const AuthForm = ({ title, typeLogin }) => {
               setAuth({
                 access_token: tokensData.data.access_token,
                 refresh_token: tokensData.data.refresh_token,
+                isAuth: true,
               }),
             )
 
@@ -91,6 +92,7 @@ export const AuthForm = ({ title, typeLogin }) => {
                 setAuth({
                   access_token: tokensData.data.access_token,
                   refresh_token: tokensData.data.refresh_token,
+                  isAuth: true,
                 }),
               )
 

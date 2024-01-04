@@ -30,6 +30,7 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
       setAuth({
         access_token: null,
         refresh_token: null,
+        isAuth: false,
       }),
     )
     localStorage.clear()
@@ -65,6 +66,7 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
       ...auth,
       access_token: refreshResult.data.access_token,
       refresh_token: refreshResult.data.refresh_token,
+      isAuth: true,
     }),
   )
 
@@ -117,13 +119,14 @@ export const adsApi = createApi({
     }),
     getUser: build.query({
       query: () => ({
-        url: `user`,
+        url: 'user',
         method: 'GET',
       }),
+      providesTags: [{ type: 'ads' }],
     }),
     getAdsUser: build.query({
       query: () => ({
-        url: `ads/me`,
+        url: 'ads/me',
         method: 'GET',
       }),
       providesTags: [{ type: 'ads' }],

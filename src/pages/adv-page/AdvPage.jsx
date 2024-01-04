@@ -3,7 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Reviews } from '../../components/modals/Reviews'
 import * as S from './AdvPage.styles'
 import { AddNewAdv } from '../../components/modals/AddNewAdv'
-import { useGetIdAdsQuery, useGetIdCommentsAdsQuery } from '../../api/adsApi'
+import {
+  useGetIdAdsQuery,
+  useGetIdCommentsAdsQuery,
+  useGetUserQuery,
+} from '../../api/adsApi'
 import { Loader } from '../../App.styles'
 import { formatDate } from '../../utils/formatDate'
 import { baseUrl } from '../../utils/baseUrl'
@@ -14,6 +18,10 @@ export const AdvPage = () => {
 
   const { data, isLoading, error } = useGetIdAdsQuery({ id: params.id })
   const { data: comments } = useGetIdCommentsAdsQuery({ id: params.id })
+  const { data: user } = useGetUserQuery()
+
+  console.log(Number(data?.user_id))
+  console.log(Number(user?.id))
 
   const [currentImg, setCurrentImg] = useState(null)
 
@@ -97,13 +105,16 @@ export const AdvPage = () => {
                   </S.ArticleInfoText>
                   <S.ArticlePrice>{data.price} ₽</S.ArticlePrice>
                   <S.ButtonsContainer>
-                    {/* Добавить проверку на объявление текущего юзера 
-                    Number(data.user_id) === id текущего юзера из стора*/}
-                    <ShowPhoneNumButton phone={data.user.phone} />
-                    <S.ArticleButton onClick={handlerAdvSettings}>
-                      Редактировать
-                    </S.ArticleButton>
-                    <S.ArticleButton>Снять с публикации</S.ArticleButton>
+                    {Number(data.user_id) === Number(user?.id) ? (
+                      <>
+                        <S.ArticleButton onClick={handlerAdvSettings}>
+                          Редактировать
+                        </S.ArticleButton>
+                        <S.ArticleButton>Снять с публикации</S.ArticleButton>
+                      </>
+                    ) : (
+                      <ShowPhoneNumButton phone={data.user.phone} />
+                    )}
                   </S.ButtonsContainer>
 
                   <S.ArticleAuthor>

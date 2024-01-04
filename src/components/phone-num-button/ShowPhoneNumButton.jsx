@@ -10,7 +10,7 @@ export const ShowPhoneNumButton = ({ phone }) => {
 
   return phone ? (
     <PhoneNumButton onClick={toggleShowPhoneNum}>
-      Показать&nbsp;телефон
+      Показать телефон
       <span>{showPhone ? phone : `${phone.slice(0, 4)} XXX XX XX`}</span>
     </PhoneNumButton>
   ) : (

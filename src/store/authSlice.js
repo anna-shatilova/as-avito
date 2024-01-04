@@ -19,6 +19,7 @@ const initialState = {
   // city: '',
   access_token: '',
   refresh_token: '',
+  isAuth: false,
 }
 
 const authSlice = createSlice({
@@ -36,6 +37,7 @@ const authSlice = createSlice({
       // state.city = payload.city
       state.access_token = payload.access_token
       state.refresh_token = payload.refresh_token
+      state.isAuth = payload.isAuth
 
       localStorage.setItem(AUTH_KEY, JSON.stringify(state))
     },
@@ -50,4 +52,3 @@ export const authReducer = authSlice.reducer
 //       state.email = payload.email
 //       state.access_token = payload.access_token
 //       state.refresh_token = payload.refresh_token
-
