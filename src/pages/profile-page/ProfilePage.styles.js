@@ -54,6 +54,27 @@ export const SettingsAvatar = styled.div`
   }
 `
 
+export const SettingsChangeAvatarLabel = styled.label`
+  position: relative;
+  display: inline-block;
+  font-size: 16px;
+  line-height: 24px;
+  color: #009ee4;
+  cursor: pointer;
+  margin: 10px 0 30px 0;
+
+  &:hover {
+    color: #ff6163;
+  }
+
+  & input {
+    width: 2px;
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+  }
+`
+
 export const SettingsChangeAvatar = styled.a`
   margin-top: 10px;
   margin-bottom: 30px;
@@ -61,6 +82,13 @@ export const SettingsChangeAvatar = styled.a`
   font-size: 16px;
   line-height: 24px;
   color: #009ee4;
+
+  & input {
+    width: 2px;
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+  }
 `
 
 export const SettingsRight = styled.div`
@@ -78,6 +106,10 @@ export const SettingsForm = styled.form`
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 6px;
     padding: 13px 19px;
+
+    &:focus {
+      outline: solid #009ee4;
+    }
 
     &::placeholder {
       background-color: transparent;
@@ -141,4 +173,14 @@ export const SellerInfoContainer = styled.div`
   & p:last-of-type {
     margin-bottom: 30px;
   }
+`
+
+export const UserInfoContainer = styled(SellerInfoContainer)`
+  display: flex;
+  flex-direction: column;
+`
+
+export const TypeErrorText = styled.h3`
+  color: red;
+  margin-bottom: 20px;
 `

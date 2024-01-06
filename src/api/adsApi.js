@@ -131,6 +131,22 @@ export const adsApi = createApi({
       }),
       providesTags: [{ type: 'ads' }],
     }),
+    changeInfoUser: build.mutation({
+      query: (userData) => ({
+        url: 'user',
+        method: 'PATCH',
+        body: userData,
+      }),
+      invalidatesTags: [{ type: 'ads' }],
+    }),
+    uploadUserAvatar: build.mutation({
+      query: (img) => ({
+        url: 'user/avatar',
+        method: 'POST',
+        body: img,
+      }),
+      invalidatesTags: [{ type: 'ads' }],
+    }),
 
     // getFavoriteTracks: build.query({
     //   query: () => ({
@@ -187,6 +203,8 @@ export const {
   useGetIdCommentsAdsQuery,
   useGetUserQuery,
   useGetAdsUserQuery,
+  useChangeInfoUserMutation,
+  useUploadUserAvatarMutation,
   //   useGetFavoriteTracksQuery,
   //   useAddFavoriteTracksMutation,
   //   useDeleteFavoriteTracksMutation,

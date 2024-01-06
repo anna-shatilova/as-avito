@@ -98,12 +98,12 @@ export const Button = styled.button`
   background-color: #009ee4;
   border: #009ee4;
 
-  // background-color: ${(props) => (props.$disable ? '#d9d9d9' : '#009ee4')};
-  // border: ${(props) => (props.$disable ? '1px solid #d9d9d9' : '#009ee4')};
+  background-color: ${(props) => (props.$disabled ? '#d9d9d9' : '#009ee4')};
+  border: ${(props) => (props.$disabled ? '1px solid #d9d9d9' : '#009ee4')};
   transition: all 0.3s ease-out;
 
   &:hover {
-    // background-color: ${(props) => (props.$disable ? '#d9d9d9' : '#0080c1')};
+    background-color: ${(props) => (props.$disabled ? '#d9d9d9' : '#0080c1')};
     background-color: #0080c1;
   }
 `
