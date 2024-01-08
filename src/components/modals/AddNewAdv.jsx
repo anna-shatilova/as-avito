@@ -3,6 +3,11 @@ import { ModalCloseButton } from '../modal-close-button/ModalCloseButton'
 import * as S from './AddNewAdv.styles'
 
 export const AddNewAdv = ({ setOpenSettingsWindow }) => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [isFormChanged, setIsFormChanged] = useState(false);
+  const [error, setError] = useState(null);
   const [disableButton] = useState(true)
   const editMode = false
 

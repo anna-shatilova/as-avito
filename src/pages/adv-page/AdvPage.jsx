@@ -20,9 +20,6 @@ export const AdvPage = () => {
   const { data: comments } = useGetIdCommentsAdsQuery({ id: params.id })
   const { data: user } = useGetUserQuery()
 
-  console.log(Number(data?.user_id))
-  console.log(Number(user?.id))
-
   const [currentImg, setCurrentImg] = useState(null)
 
   const navigate = useNavigate()
@@ -156,6 +153,7 @@ export const AdvPage = () => {
 
       {isOpenReviews && (
         <Reviews
+          id={params.id}
           comments={comments}
           setOpenReviewsWindow={closeReviewsWindow}
         />

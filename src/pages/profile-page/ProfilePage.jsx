@@ -155,7 +155,6 @@ export const ProfilePage = () => {
                               placeholder="Введите фамилию"
                               defaultValue={surname}
                               onChange={handlerSurnameChange}
-                              // onClick={setInputFocus}
                             />
                           </S.SettingsInputContainer>
 

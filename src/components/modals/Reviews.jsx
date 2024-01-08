@@ -1,20 +1,40 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as S from './Reviews.styles'
 import { ModalCloseButton } from '../modal-close-button/ModalCloseButton'
 import { baseUrl } from '../../utils/baseUrl'
 import { formatDate } from '../../utils/formatDate'
+import { useAddIdCommentsAdsMutation } from '../../api/adsApi'
 
-export const Reviews = ({ comments, setOpenReviewsWindow }) => {
+export const Reviews = ({ id, comments, setOpenReviewsWindow }) => {
+  const [newComment, setNewComment] = useState('')
+
+  const [addIdComment] = useAddIdCommentsAdsMutation()
+
   const user = useSelector((state) => state.auth.isAuth)
   const navigate = useNavigate()
 
   const [disableButton] = useState(true)
 
-  const handlerButtonReviewLogin = () => {
-    !user && navigate('/login')
+  const handlerButtonReviewLogin = async (e) => {
+    e.preventDefault()
+
+    if (!user) {
+      navigate('/login')
+    } else {
+      await addIdComment({
+        text: newComment,
+        id,
+      }).unwrap()
+      setNewComment('')
+    }
   }
+
+  const handlerAddComment = (e) => {
+    setNewComment(e.target.value.trim())
+  }
+
   return (
     <S.Wrapper>
       <S.ContainerBg>
@@ -23,17 +43,20 @@ export const Reviews = ({ comments, setOpenReviewsWindow }) => {
             <S.ModalHeading>Отзывы о товаре</S.ModalHeading>
             <ModalCloseButton setOpenModalWindow={setOpenReviewsWindow} />
             <S.ModalScroll>
-              <S.ModalFormAddReview action="#">
+              <S.ModalFormAddReview>
                 <S.FormAddReviewBlock>
                   {user ? (
                     <>
                       <label htmlFor="text">Добавить отзыв</label>
                       <textarea
+                        id="text"
                         name="text"
                         cols="auto"
                         rows="5"
                         placeholder="Введите описание"
                         required
+                        value={newComment}
+                        onChange={handlerAddComment}
                       ></textarea>
                     </>
                   ) : (

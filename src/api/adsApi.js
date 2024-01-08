@@ -117,6 +117,15 @@ export const adsApi = createApi({
       }),
       providesTags: [{ type: 'ads' }],
     }),
+    addIdCommentsAds: build.mutation({
+      query: ({ id, text }) => ({
+        url: `ads/${id}/comments`,
+        method: 'POST',
+        body: {text},
+      }),
+      invalidatesTags: [{ type: 'ads' }],
+    }),
+
     getUser: build.query({
       query: () => ({
         url: 'user',
@@ -201,6 +210,7 @@ export const {
   // useGetAdsSellerQuery,
   useGetIdAdsQuery,
   useGetIdCommentsAdsQuery,
+  useAddIdCommentsAdsMutation,
   useGetUserQuery,
   useGetAdsUserQuery,
   useChangeInfoUserMutation,
