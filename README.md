@@ -18,8 +18,9 @@
 
 ##  Технологии, используемые при разработке проекта:
 
+Язык: JavaScript
 - React (React Hooks)
-- Redux Toolkit
+- Redux
 - RTK Query
 - React Form
 - React Router
