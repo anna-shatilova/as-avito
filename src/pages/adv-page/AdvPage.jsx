@@ -4,6 +4,7 @@ import { Reviews } from '../../components/modals/Reviews'
 import * as S from './AdvPage.styles'
 import { AddNewAdv } from '../../components/modals/AddNewAdv'
 import {
+  useDeleteAdsMutation,
   useGetIdAdsQuery,
   useGetIdCommentsAdsQuery,
   useGetUserQuery,
@@ -16,15 +17,20 @@ import { ShowPhoneNumButton } from '../../components/phone-num-button/ShowPhoneN
 export const AdvPage = () => {
   const params = useParams()
 
-  const { data, isLoading, error } = useGetIdAdsQuery({ id: params.id })
-  const { data: comments } = useGetIdCommentsAdsQuery({ id: params.id })
-  const { data: user } = useGetUserQuery()
-
   const [currentImg, setCurrentImg] = useState(null)
-
-  const navigate = useNavigate()
   const [isOpenReviews, setOpenReviews] = useState(false)
   const [isAdvSettings, setAdvSettings] = useState(false)
+  const [isSkipRefetching, setIsSkipRefetching] = useState(false)
+
+  const { data, isLoading, error } = useGetIdAdsQuery({
+    id: params.id,
+    skip: isSkipRefetching,
+  })
+  const { data: comments } = useGetIdCommentsAdsQuery({ id: params.id })
+  const { data: user } = useGetUserQuery()
+  const [deleteAds] = useDeleteAdsMutation()
+
+  const navigate = useNavigate()
 
   const handlerOpenReviews = () => {
     setOpenReviews((isOpenReviews) => !isOpenReviews)
@@ -32,6 +38,14 @@ export const AdvPage = () => {
   const handlerAdvSettings = () => {
     setAdvSettings((isAdvSettings) => !isAdvSettings)
   }
+
+  const handlerDeleteAdv = async (evt) => {
+    evt.preventDefault()
+    setIsSkipRefetching(true)
+    await deleteAds({ id: params.id }).unwrap()
+    navigate('/profile')
+  }
+
   // закрывает модальные окна
   function closeReviewsWindow() {
     setOpenReviews((isOpenReviews) => !isOpenReviews)
@@ -107,7 +121,9 @@ export const AdvPage = () => {
                         <S.ArticleButton onClick={handlerAdvSettings}>
                           Редактировать
                         </S.ArticleButton>
-                        <S.ArticleButton>Снять с публикации</S.ArticleButton>
+                        <S.ArticleButton onClick={handlerDeleteAdv}>
+                          Снять с публикации
+                        </S.ArticleButton>
                       </>
                     ) : (
                       <ShowPhoneNumButton phone={data.user.phone} />
@@ -159,7 +175,12 @@ export const AdvPage = () => {
         />
       )}
       {isAdvSettings && (
-        <AddNewAdv setOpenSettingsWindow={closeSettingsWindow} />
+        <AddNewAdv
+          id={params.id}
+          ads={data}
+          isEditMode={true}
+          setOpenSettingsWindow={closeSettingsWindow}
+        />
       )}
     </>
   )

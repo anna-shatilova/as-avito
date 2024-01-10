@@ -110,6 +110,69 @@ export const adsApi = createApi({
       }),
       providesTags: [{ type: 'ads' }],
     }),
+    // addNewAds: build.mutation({
+    //   query: (data) => {
+    //     const searchParams = new URLSearchParams()
+    //     searchParams.append('title', data.get('title'))
+    //     searchParams.append('description', data.get('description'))
+    //     searchParams.append('price', data.get('price'))
+
+    //     const arrData = [...data]
+    //     const length = arrData.length
+    //     const formData = new FormData()
+
+    //     for (let i = 1; i < length - 2; i++) {
+    //       formData.append(`files`, data.get(`image${i}`))
+    //     }
+
+    //     return {
+    //       url: `ads?${searchParams.toString()}`,
+    //       method: 'POST',
+    //       body: formData,
+    //     }
+    //   },
+    //   invalidatesTags: [{ type: 'ads' }],
+    // }),
+    addNewAdsText: build.mutation({
+      query: (data) => ({
+        url: 'adstext',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: [{ type: 'ads' }],
+    }),
+    editAds: build.mutation({
+      query: ({ id, title, description, price }) => ({
+        url: `ads/${id}`,
+        method: 'PATCH',
+        body: { title, description, price },
+      }),
+      invalidatesTags: [{ type: 'ads' }],
+    }),
+    deleteAds: build.mutation({
+      query: ({ id }) => ({
+        url: `ads/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'ads' }],
+    }),
+
+    addFotoToAdv: build.mutation({
+      query: ({ id, formData }) => ({
+        url: `ads/${id}/image`,
+        method: 'POST',
+        body: formData,
+      }),
+      invalidatesTags: [{ type: 'ads' }],
+    }),
+    deleteAdvFoto: build.mutation({
+      query: ({ id, imageUrl }) => ({
+        url: `ads/${id}/image?file_url=${imageUrl}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: [{ type: 'ads' }],
+    }),
+
     getIdCommentsAds: build.query({
       query: ({ id }) => ({
         url: `ads/${id}/comments`,
@@ -121,7 +184,7 @@ export const adsApi = createApi({
       query: ({ id, text }) => ({
         url: `ads/${id}/comments`,
         method: 'POST',
-        body: {text},
+        body: { text },
       }),
       invalidatesTags: [{ type: 'ads' }],
     }),
@@ -156,58 +219,11 @@ export const adsApi = createApi({
       }),
       invalidatesTags: [{ type: 'ads' }],
     }),
-
-    // getFavoriteTracks: build.query({
-    //   query: () => ({
-    //     url: 'track/favorite/all',
-    //   }),
-    //   providesTags: (result) =>
-    //     result
-    //       ? [
-    //           ...result.map(({ id }) => ({ type: 'FavoriteTracks', id })),
-    //           { type: 'FavoriteTracks', id: 'LIST' },
-    //         ]
-    //       : [{ type: 'FavoriteTracks', id: 'LIST' }],
-    // }),
-    // addFavoriteTracks: build.mutation({
-    //   query: ({ id }) => ({
-    //     url: `track/${id}/favorite/`,
-    //     method: 'POST',
-    //   }),
-    //   invalidatesTags: [
-    //     { type: 'FavoriteTracks', id: 'LIST' },
-    //     { type: 'Track' },
-    //   ],
-    // }),
-    // deleteFavoriteTracks: build.mutation({
-    //   query: ({ id }) => ({
-    //     url: `track/${id}/favorite/`,
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: [
-    //     { type: 'FavoriteTracks', id: 'LIST' },
-    //     { type: 'Track' },
-    //   ],
-    // }),
-    // getCategoryTracks: build.query({
-    //   query: ({ id }) => ({
-    //     url: `selection/${id}/`,
-    //     method: 'GET',
-    //   }),
-    //   providesTags: (result) =>
-    //     result
-    //       ? [
-    //           ...result.items.map(({ id }) => ({ type: 'FavoriteTracks', id })),
-    //           { type: 'FavoriteTracks', id: 'LIST' },
-    //         ]
-    //       : [{ type: 'FavoriteTracks', id: 'LIST' }],
-    // }),
   }),
 })
 
 export const {
   useGetAdsQuery,
-  // useGetAdsSellerQuery,
   useGetIdAdsQuery,
   useGetIdCommentsAdsQuery,
   useAddIdCommentsAdsMutation,
@@ -215,8 +231,10 @@ export const {
   useGetAdsUserQuery,
   useChangeInfoUserMutation,
   useUploadUserAvatarMutation,
-  //   useGetFavoriteTracksQuery,
-  //   useAddFavoriteTracksMutation,
-  //   useDeleteFavoriteTracksMutation,
-  //   useGetCategoryTracksQuery,
+  useAddNewAdsTextMutation,
+  useAddFotoToAdvMutation,
+  useDeleteAdvFotoMutation,
+  useAddNewAdsMutation,
+  useEditAdsMutation,
+  useDeleteAdsMutation,
 } = adsApi

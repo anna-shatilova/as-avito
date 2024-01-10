@@ -8,14 +8,20 @@ import { setAuth } from '../../store/authSlice'
 export const Header = () => {
   const user = useSelector((state) => state.auth.isAuth)
 
-  const [modalAddNewAdv, setModalAddNewAdv] = useState(false)
+  const [openNewAdvWindow, setOpenNewAdvWindow] = useState(false)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const handlerModalAddNewAdv = () => {
-    setModalAddNewAdv(!modalAddNewAdv)
+    setOpenNewAdvWindow((openNewAdvWindow) => !openNewAdvWindow)
   }
+
+  //функция закрывает модальное окно
+  function closeNewAdvWindow() {
+    setOpenNewAdvWindow((openNewAdvWindow) => !openNewAdvWindow)
+  }
+
 
   const handleLogout = () => {
     dispatch(
@@ -51,11 +57,9 @@ export const Header = () => {
         </S.HeaderNav>
       </S.Header>
 
-      {modalAddNewAdv ? (
-        <AddNewAdv setModalAddNewAdv={setModalAddNewAdv} />
-      ) : (
-        ''
-      )}
+      {openNewAdvWindow &&
+        <AddNewAdv isEditMode={false} setOpenNewAdvWindow={closeNewAdvWindow}  />
+      }
     </>
   )
 }

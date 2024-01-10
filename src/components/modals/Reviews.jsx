@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import * as S from './Reviews.styles'
@@ -24,7 +24,7 @@ export const Reviews = ({ id, comments, setOpenReviewsWindow }) => {
       navigate('/login')
     } else {
       await addIdComment({
-        text: newComment,
+        text: newComment.trim(),
         id,
       }).unwrap()
       setNewComment('')
@@ -32,7 +32,7 @@ export const Reviews = ({ id, comments, setOpenReviewsWindow }) => {
   }
 
   const handlerAddComment = (e) => {
-    setNewComment(e.target.value.trim())
+    setNewComment(e.target.value)
   }
 
   return (
