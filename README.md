@@ -24,6 +24,7 @@
 - RTK Query
 - React Form
 - React Router
+- Styled components
 
 
 ## Инструкция по запуску проекта
