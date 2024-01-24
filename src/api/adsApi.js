@@ -34,7 +34,7 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
       }),
     )
     localStorage.clear()
-    window.location.assign('/login')
+    // window.location.assign('/login')
   }
 
   const { auth } = api.getState()
