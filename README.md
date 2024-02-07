@@ -37,7 +37,7 @@
 Для клонирования репозитория выполните команду:
 
 ```
-git clone https://github.com/annadancelife/as-avito.git
+git clone https://github.com/anna-shatilova/as-avito.git
 ```
 
 Перед разработкой необходимо проинсталировать пакет проекта.
